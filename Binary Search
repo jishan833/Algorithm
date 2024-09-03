@@ -1,0 +1,79 @@
+#include<stdio.h>
+void swap(int *a, int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void Bubble_sort(int arr[], int n)
+{
+    for(int ph = 0; ph < n - 1; ph++)
+    {
+        int flag = 0;
+        for(int i = 0; i < n - 1 - ph; i++) {
+            if(arr[i] > arr[i + 1]) {
+                swap(&arr[i], &arr[i + 1]);
+                flag = 1;
+            }
+        }
+        if(flag == 0)
+            break;
+    }
+}
+int BinarySearch(int array[], int target, int size)
+{
+    int low = 0;
+    int upper = size - 1;
+
+    while (low <= upper)
+    {
+        int mid = (low + upper) / 2;
+
+        if (array[mid] == target)
+        {
+          return mid;
+        }
+        else if (target < array[mid])
+        {
+            upper = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+    }
+    return -1;
+}
+
+int main()
+{
+    int array[100], n, target;
+
+    printf("Enter the number of elements in the array= ");
+    scanf("%d", &n);
+
+    printf("Enter the elements of the array: ");
+    for(int i = 0; i < n; i++) {
+        scanf("%d", &array[i]);
+    }
+
+    Bubble_sort(array, n);
+
+    printf("Sorted array: ");
+    for(int i = 0; i < n; i++) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+
+    printf("Enter a target number to search: ");
+    scanf("%d", &target);
+
+    int result = BinarySearch(array, target, n);
+
+    if (result == -1) {
+        printf("Element not found\n");
+    } else {
+        printf("Element is found at index %d\n", result);
+    }
+    return 0;
+}
