@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define MAX INT_MAX
+
+void bellman(int graph[][100], int V, int SP)
+ {
+    int dist[100];
+    for(int i = 0; i < V; i++)
+    {
+        dist[i] = MAX;
+    }
+    dist[SP] = 0;
+    for(int i = 0; i < V - 1; i++)
+     {
+        for(int u = 0; u < V; u++)
+        {
+            for(int v = 0; v < V; v++)
+             {
+                if(graph[u][v] != 0 && dist[u] != MAX && dist[u] + graph[u][v] < dist[v])
+                {
+                    dist[v] = dist[u] + graph[u][v];
+                }
+            }
+        }
+    }
+    for(int u = 0; u < V; u++)
+    {
+        for(int v = 0; v < V; v++)
+        {
+            if(graph[u][v] != 0 && dist[u] != MAX && dist[u] + graph[u][v] < dist[v])
+            {
+                printf("Graph contains a negative weight cycle\n");
+                return;
+            }
+        }
+    }
+
+    for(int i = 0; i < V; i++)
+        {
+        if(dist[i] == MAX)
+        {
+          printf("Vertex %d is unreachable from the source\n", i);
+        }
+        else
+        {
+            printf("Distance from source to vertex %d is %d\n", i, dist[i]);
+        }
+    }
+}
+int main()
+{
+    int V, SP;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &V);
+    printf("Enter source vertex: ");
+    scanf("%d", &SP);
+
+    int graph[100][100];
+
+    printf("Enter the adjacency matrix:\n");
+    for(int i = 0; i < V; i++)
+    {
+      for(int j = 0; j < V; j++)
+       {
+         scanf("%d", &graph[i][j]);
+       }
+    }
+    bellman(graph, V, SP);
+    return 0;
+}
