@@ -1,0 +1,59 @@
+#include<stdio.h>
+
+#define INF 99999
+
+void FW(int g[][4], int length);
+
+int main() {
+
+    int g[4][4] = {
+        {0, 3, INF, INF},
+        {2, 0, INF, INF},
+        {INF, 7, 0, INF},
+        {6, INF, INF, 0},
+    };
+
+    int length = 4;
+    FW(g, length);
+    return 0;
+}
+
+void FW(int g[][4], int length)
+{
+    int sol[4][4];
+
+    for (int i = 0; i < length; i++)
+        {
+        for (int j = 0; j < length; j++)
+        {
+          sol[i][j] = g[i][j];
+        }
+    }
+
+    for (int k = 0; k < length; k++)
+        {
+        for (int i = 0; i < length; i++)
+        {
+            for (int j = 0; j < length; j++)
+            {
+                if (sol[i][k] != INF && sol[k][j] != INF && sol[i][k] + sol[k][j] < sol[i][j])
+                {
+                  sol[i][j] = sol[i][k] + sol[k][j];
+                }
+            }
+        }
+    }
+
+    printf("Shortest path matrix:\n");
+    for (int i = 0; i < length; i++)
+        {
+        for (int j = 0; j < length; j++)
+        {
+            if (sol[i][j] == INF)
+                printf("INF ");
+            else
+                printf("%d ", sol[i][j]);
+        }
+        printf("\n");
+    }
+}
