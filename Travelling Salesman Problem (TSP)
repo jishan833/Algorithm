@@ -1,0 +1,92 @@
+#include <stdio.h> 
+#include <stdbool.h> 
+#define MAX 100 
+int n; 
+int graph[MAX][MAX]; 
+int tour[MAX]; 
+bool visit[MAX]; 
+int minCost = 10000000; 
+int BestTour[MAX]; 
+int level = 0; 
+void TSP(int graph[MAX][MAX], int n, int tour[MAX], bool visit[MAX], int level, 
+int *minCost, int BestTour[MAX]); 
+int CostCal(int graph[MAX][MAX], int tour[MAX], int n); 
+int main() { 
+n = 4; 
+    int startNode; 
+ 
+    int Graph[4][4] = {{0, 10, 15, 20}, 
+                               {10, 0, 35, 25}, 
+                               {15, 35, 0, 30}, 
+                               {20, 25, 30, 0}}; 
+ 
+    for (int i = 0; i < n; i++) 
+    { 
+        for (int j = 0; j < n; j++) 
+        { 
+            graph[i][j] = Graph[i][j]; 
+        } 
+    } 
+    printf("Enter the starting node (0 to %d): ", n - 1); 
+    scanf("%d", &startNode); 
+    for (int i = 0; i < n; i++) 
+    { 
+        visit[i] = false; 
+        tour[i] = -1; 
+    } 
+    tour[0] = startNode; 
+    visit[startNode] = true; 
+ 
+    TSP(graph, n, tour, visit, 1, &minCost, BestTour); 
+ 
+    for (int i = 0; i < n; i++) 
+    { 
+        printf("%d -> ", BestTour[i]); 
+    } 
+    printf("%d\n\n", BestTour[0]); 
+ 
+    printf("Best tour found with minimum cost: %d\n", minCost); 
+} 
+ 
+int CostCal(int graph[MAX][MAX], int tour[MAX], int n) 
+{ 
+    int cost = 0; 
+    for (int i = 0; i < n - 1; i++) 
+    { 
+        cost += graph[tour[i]][tour[i + 1]]; 
+    } 
+    cost += graph[tour[n - 1]][tour[0]]; 
+    return cost; 
+} 
+ 
+void TSP(int graph[MAX][MAX], int n, int tour[MAX], bool visit[MAX], int level, 
+int *minCost, int BestTour[MAX]) 
+{ 
+    if (level == n) 
+    { 
+        int currentCost = CostCal(graph, tour, n); 
+        if (currentCost < *minCost) 
+        { 
+            *minCost = currentCost; 
+            for (int i = 0; i < n; i++) 
+            { 
+                BestTour[i] = tour[i]; 
+            } 
+        } 
+        return; 
+    } 
+ 
+    for (int i = 0; i < n; i++) 
+    { 
+        if (!visit[i]) 
+        { 
+            visit[i] = true; 
+            tour[level] = i; 
+ 
+            TSP(graph, n, tour, visit, level + 1, minCost, BestTour); 
+ 
+            visit[i] = false; 
+            tour[level] = -1; 
+        } 
+    } 
+} 
